@@ -107,9 +107,11 @@ database = sys.argv[2]
 db_classname = DATABASES[database]
 options = sys.argv[3:]
 
-keystore = "-Djavax.net.ssl.keyStore=%s" %os.path.expanduser("~/mykeystore")
+truststore = "-Djavax.net.ssl.trustStore=%s" %os.path.expanduser("~/mytruststore")
+truststore_pass = "-Djavax.net.ssl.trustStorePassword=password"
+keystore = "-Djavax.net.ssl.keyStore=%s" %os.path.expanduser("~/client.pkcs12")
 keystore_pass = "-Djavax.net.ssl.keyStorePassword=password"
-ycsb_command = ["java", keystore, keystore_pass, "-cp",  os.pathsep.join(find_jars(ycsb_home, database)), \
+ycsb_command = ["java", truststore, truststore_pass, keystore, keystore_pass, "-cp",  os.pathsep.join(find_jars(ycsb_home, database)), \
                 COMMANDS[sys.argv[1]]["main"], "-db", db_classname] + options
 if command:
     ycsb_command.append(command)
